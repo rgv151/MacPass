@@ -66,7 +66,7 @@
 @implementation DDHotKey (MPValidation)
 
 - (BOOL)isValid {
-  NSEventModifierFlags flags = 0;
+  EventModifiers flags = 0;
   switch(self.keyCode) {
     case  kVK_Command:
       flags = NSCommandKeyMask;
