@@ -269,6 +269,10 @@ NSString *const MPDocumentGroupKey                        = @"MPDocumentGroupKey
 #pragma mark Lock/Unlock/Decrypt
 
 - (void)lockDatabase:(id)sender {
+  if(self.undoManager.canUndo) {
+    /* ask the user? */
+    [self.undoManager removeAllActions];
+  }
   [self exitSearch:self];
   NSError *error;
   /* Locking needs to be lossless hence just use the XML format */
@@ -311,7 +315,10 @@ NSString *const MPDocumentGroupKey                        = @"MPDocumentGroupKey
   self.tree.metaData.masterKeyChanged = [NSDate date];
   /* Key change is not undoable so just recored the change as done */
   [self updateChangeCount:NSChangeDone];
-  /* We need to store the key file once the user actually writes the database */
+  /*
+   If the user opted to remeber key files for documents, we should update this information.
+   But it's impossible to know, if he actaully saves the changes!
+   */
   return YES;
 }
 

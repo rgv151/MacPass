@@ -118,7 +118,7 @@
     NSRange commandRange = [rangeValue rangeValue];
     /* All non-commands will get translated into paste commands */
     if(commandRange.location > lastLocation) {
-      /* If there were modifiers we need to use the next single stroke and make update the modifier command */
+      /* If there were modifiers we need to use the next single stroke and update the modifier command */
       if(collectedModifers) {
         NSString *modifiedKey = [context.evaluatedCommand substringWithRange:NSMakeRange(lastLocation, 1)];
         MPAutotypeKeyPress *press = [[MPAutotypeKeyPress alloc] initWithModifierMask:collectedModifers character:modifiedKey];
@@ -283,12 +283,12 @@
         return; // Done
       }
       else if([kKPKAutotypeVirtualKey isEqualToString:command]) {
-        NSLog(@"Virutal key strokes aren't supported yet!");
+        NSLog(@"Virtual key strokes aren't supported yet!");
         // TODO add key
       }
     }
     else {
-      NSLog(@"Unable to value part in command:%@", commandString);
+      NSLog(@"Unable to parse value part in command:%@", commandString);
     }
   }
   else {
@@ -311,23 +311,29 @@
 }
 
 - (void)sendPressKey:(CGKeyCode)keyCode modifierFlags:(CGEventFlags)flags {
-  CGEventRef pressKey = CGEventCreateKeyboardEvent (NULL, keyCode, YES);
-  CGEventRef releaseKey = CGEventCreateKeyboardEvent (NULL, keyCode, NO);
   
-  /* The modifer Masks might be set, reset them */
-  CGEventSetFlags(pressKey,0);
-  CGEventSetFlags(releaseKey, 0);
-  /* Set the modifiers to the ones we want */
-  CGEventSetFlags(pressKey,flags);
+  CGEventSourceRef eventSource = CGEventSourceCreate(kCGEventSourceStatePrivate);
+  if(NULL == eventSource) {
+    return; // We could not create our own source, abort!
+  }
+  CGEventRef pressKey = CGEventCreateKeyboardEvent (eventSource, keyCode, YES);
+  CGEventRef releaseKey = CGEventCreateKeyboardEvent (eventSource, keyCode, NO);
+  
+  /*
+   Set the modifiers to the ones we want
+   We use our private event source so no modifier reset should be needed
+   */
+  CGEventSetFlags(pressKey, flags);
   CGEventSetFlags(releaseKey, flags);
   
   /* Send the event */
-  CGEventPost(kCGSessionEventTap, pressKey);
+  CGEventPost(kCGHIDEventTap, pressKey);
   usleep(0.05 * NSEC_PER_MSEC);
-  CGEventPost(kCGSessionEventTap, releaseKey);
+  CGEventPost(kCGHIDEventTap, releaseKey);
   
   CFRelease(pressKey);
   CFRelease(releaseKey);
+  CFRelease(eventSource);
 }
 
 - (void)sendPasteKeyCode {

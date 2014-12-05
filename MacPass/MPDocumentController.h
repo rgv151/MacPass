@@ -8,8 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MPDocumentController : NSDocumentController <NSOpenSavePanelDelegate>
+@interface MPDocumentController : NSDocumentController
 
-- (IBAction)toggleAllowAllFilesButton:(id)sender;
+- (IBAction)toggleAllowAllFiles:(id)sender;
+- (IBAction)toggleShowHiddenFiles:(id)sender;
 
 @end

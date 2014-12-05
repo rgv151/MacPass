@@ -33,10 +33,11 @@ There have been some changes in the submodule urls. Please consider re-syncing a
 
 * Binary releases (0.2.x - 0.3.x):
   * KDBX DeletedObjects are stripped on save. This will break synchronisation features!
-* Binary releases (since 0.4.x):
-  * KDBX History is only preseverd. Editting doesn't create new history entries
+* Binary releases (0.4.x):
   * Default Autotype Sequences will get stored although they shouldn't be stored
   * Default Autotype sequence is wrong ````{TAB}{USERNAME}{TAB}{PASSWORD}{ENTER}```` instead of ````{USERNAME}{TAB}{PASSWORD}{ENTER}````
+* Binary releases (0.5.x):
+  * KDBX History is only preseverd. Editing doesn't create new history entries
   
 ##System Requirement
 
@@ -89,11 +90,21 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-##Contribtuions
+##Contributions
 
 [Iiro Jäppinen](https://iiro.jappinen.me) MacPass icon
 
-[Gil André](mailto:gil@panix.com) French localizations
+[Thom Williams](https://github.com/thomscode) Document icons
+
+[Jellyfrog](https://github.com/Jellyfrog) Asset file size optimization
+
+[Jannick Hemelhof](https://github.com/clone1612) Dutch localization
+
+[Gil André](mailto:gil@panix.com) and [Michel Bibal](https://github.com/MBibal) French localization
+
+[Benjamin Steinwender](https://github.com/auge) German localization
+
+[Zhao Peng](patchao2000@gmail.com) Simplified Chinese localization
 
 [Nathaniel Madura](mailto:nmadura@umich.edu) Refacotrings, first create Database 
 
@@ -107,11 +118,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 [Frank Enderle](http://www.anamica.de/) Cmd+F now marks the text of the search field if the filterbar is already visible and sets the focus. Set remaining password fields to fixed width font.
 
-[Josh Halstead](mailto:jhalstead85@gmail.com) Update Readme (typo)
+[Josh Halstead](mailto:jhalstead85@gmail.com) and [Sebastian Lövdahl](https://github.com/slovdahl) Fixed typos in Readme
 
 [Chhom Seng](https://github.com/cseng) Fixed issue with blank outline and entry views if the inspector was hidden before unlocking the database. Implemented context menu validation for entry context menu.
 
-[James Hurst](https://github.com/jamesrhurst) Obfuscated autotyping and restoring of pasteboard objects. Fixed issues when exiting search. Implemented workflow double click settings. Make selected textfield end editing when a save will occur. Finished custom browser support for open URL action. Percent escape strings before creating URLs. Fixed issues with Autotype key events. Added missing characters for password generation. Improved "Add Entry" workflow. Fixed bug with icon resetting to default after closing popover. Added ability to set default password generation settings. Made autotype work in more situations
+[James Hurst](https://github.com/jamesrhurst) Obfuscated autotyping and restoring of pasteboard objects. Fixed issues when exiting search. Implemented workflow double click settings. Make selected textfield end editing when a save will occur. Finished custom browser support for open URL action. Percent escape strings before creating URLs. Fixed issues with Autotype key events. Added missing characters for password generation. Improved "Add Entry" workflow. Fixed bug with icon resetting to default after closing popover. Added ability to set default password generation settings. Made autotype work in more situations. Fixed various issues with Sparkle. 
+
+[Yono Mittlefehldt](https://twitter.com/yonomitt) Added 90 days expiration preset.
+
+[Dennis Bolio](https://github.com/dennisbolio) Fixes issues with icon selection
 
 ##Copyright
 

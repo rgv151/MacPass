@@ -373,8 +373,9 @@ NSString *const _MPTableSecurCellView = @"PasswordCell";
   }
   /*
    If a group is the current item, see if we already show that group
+	 also test if an element has been selected (issue #257)
    */
-  if(document.selectedItem == document.selectedGroup) {
+  if(document.selectedItem == document.selectedGroup && document.selectedItem != nil) {
     if(document.hasSearch) {
       /* If search was active, stop it and exit */
       [document exitSearch:self];
@@ -402,7 +403,14 @@ NSString *const _MPTableSecurCellView = @"PasswordCell";
 
 - (void)_didAddItem:(NSNotification *)notification {
   MPDocument *document = [[self windowController] document];
+  if(!document.selectedGroup) {
+    /* TODO: show group? */
+    return; // No group selected
+  }
   KPKEntry *entry = document.selectedGroup.entries.lastObject;
+  if(!entry) {
+    return; // No Entry found, nothing to select.
+  }
   NSUInteger row = [self.entryArrayController.arrangedObjects indexOfObject:entry];
   [self.entryTable scrollRowToVisible:row];
   [self.entryTable selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];

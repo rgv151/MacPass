@@ -31,16 +31,22 @@
   return self;
 }
 
+- (NSString *)description {
+  return [[NSString alloc] initWithFormat:@"%@: modifierMaks:%llu keyCode:%d", [self class], self.modifierMask, self.keyCode];
+}
+
 - (void)execute {
   if(![self isValid]) {
     return; // no valid command. Stop.
   }
-  CGKeyCode mappedKey = [self _transformKeyCode];
-  [self sendPressKey:mappedKey modifierFlags:self.modifierMask];
+  //CGKeyCode mappedKey = [self _transformKeyCode];
+  [self sendPressKey:self.keyCode modifierFlags:self.modifierMask];
 }
 
 - (BOOL)isValid {
-  return ([self _transformKeyCode] != kMPUnknownKeyCode);
+  return YES;
+  /* TODO test for actual validity of the command */
+  //return ([self _transformKeyCode] != kMPUnknownKeyCode);
 }
 
 - (CGKeyCode)_transformKeyCode {

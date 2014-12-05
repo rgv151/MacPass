@@ -13,7 +13,7 @@
 
 @interface MPAutotypePaste ()
 
-@property (strong) NSString *pasteData;
+@property (copy) NSString *pasteData;
 
 @end
 
@@ -27,10 +27,13 @@
   return self;
 }
 
+- (NSString *)description {
+  return [[NSString alloc] initWithFormat:@"%@ paste:%@", [self class], self.pasteData];
+}
+
 - (void)appendString:(NSString *)aString {
   self.pasteData = [self.pasteData stringByAppendingString:aString];
 }
-
 
 - (void)execute {
   if([self.pasteData length] > 0) {
