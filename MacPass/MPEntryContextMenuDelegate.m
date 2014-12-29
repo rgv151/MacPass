@@ -22,7 +22,6 @@
 
 #import "MPEntryContextMenuDelegate.h"
 #import "MPEntryViewController.h"
-#import "MPDocument.h"
 
 #import "KPKEntry.h"
 #import "KPKAttribute.h"
@@ -46,9 +45,10 @@ static NSUInteger const kMPAttachmentsMenuItem = 2000;
   if([lastItem isSeparatorItem]) {
     [menu removeItem:lastItem];
   }
-  MPDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
-  
-  KPKEntry *entry = document.selectedEntry;
+  /* since we can get opend on the non-selected entry, we have to resolve the target node */
+  id<MPTargetNodeResolving> entryResolver = [NSApp targetForAction:@selector(currentTargetEntry)];
+  KPKEntry *entry  = [entryResolver currentTargetEntry];
+
   if([entry.customAttributes count] > 0) {
     [menu addItem:[NSMenuItem separatorItem]];
     NSMenuItem *attributeItem = [[NSMenuItem alloc] init];

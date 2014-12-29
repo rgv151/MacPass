@@ -143,13 +143,21 @@ NSString *const MPDocumentGroupKey                        = @"MPDocumentGroupKey
 }
 
 - (void)saveDocumentAs:(id)sender {
+  /* FIXME: Use controllers for bindings to enable NSEditorRegistration. NSDocument supports this! */
   [[NSNotificationCenter defaultCenter] postNotificationName:MPDocumentWillSaveNotification object:self];
   [super saveDocumentAs:sender];
 }
 
 - (void)saveDocument:(id)sender {
+  /* FIXME: Use controllers for bindings to enable NSEditorRegistration. NSDocument supports this! */
   [[NSNotificationCenter defaultCenter] postNotificationName:MPDocumentWillSaveNotification object:self];
   [super saveDocument:sender];
+}
+
+- (void)saveDocumentTo:(id)sender {
+  /* FIXME: Use controllers for bindings to enable NSEditorRegistration. NSDocument supports this! */
+  [[NSNotificationCenter defaultCenter] postNotificationName:MPDocumentWillSaveNotification object:self];
+  [super saveDocumentTo:sender];
 }
 
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController
@@ -706,6 +714,9 @@ NSString *const MPDocumentGroupKey                        = @"MPDocumentGroupKey
     case MPActionCopyURL:
     case MPActionOpenURL:
       valid &= (nil != targetEntry ) && ([targetEntry.url length] > 0);
+      break;
+    case MPActionPerformAutotypeForSelectedEntry:
+      valid &= (nil != targetEntry);
       break;
     default:
       break;
