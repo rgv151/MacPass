@@ -273,8 +273,10 @@ NSString *const _MPTableSecurCellView = @"PasswordCell";
     }
     else {
       NSAssert(entry.parent != nil, @"Entry needs to have a parent");
-      [[view textField] bind:NSValueBinding toObject:entry.parent withKeyPath:NSStringFromSelector(@selector(name)) options:nil];
-      [[view imageView] bind:NSValueBinding toObject:entry.parent withKeyPath:NSStringFromSelector(@selector(iconImage)) options:nil];
+      NSString *parentNameKeyPath = [NSString stringWithFormat:@"%@.%@",NSStringFromSelector(@selector(parent)),NSStringFromSelector(@selector(name))];
+      NSString *parentIconImageKeyPath = [NSString stringWithFormat:@"%@.%@",NSStringFromSelector(@selector(parent)),NSStringFromSelector(@selector(iconImage))];
+      [[view textField] bind:NSValueBinding toObject:entry withKeyPath:parentNameKeyPath options:nil];
+      [[view imageView] bind:NSValueBinding toObject:entry withKeyPath:parentIconImageKeyPath options:nil];
     }
   }
   else if(isPasswordColum) {
@@ -645,22 +647,26 @@ NSString *const _MPTableSecurCellView = @"PasswordCell";
 
 - (void)openURL:(id)sender {
   KPKEntry *selectedEntry = [[self currentTargetNode] asEntry];
-  if(selectedEntry && [selectedEntry.url length] > 0) {
-    NSURL *webURL = [NSURL URLWithString:[selectedEntry.url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+  NSString *expandedURL = [selectedEntry.url finalValueForEntry:selectedEntry];
+  if(expandedURL.length > 0) {
+    NSURL *webURL = [NSURL URLWithString:[expandedURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     NSString *scheme = [webURL scheme];
     if(!scheme) {
-      webURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@", [selectedEntry.url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+      webURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@", [expandedURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
     }
     
     NSString *browserBundleID = [[NSUserDefaults standardUserDefaults] objectForKey:kMPSettingsKeyBrowserBundleId];
-    BOOL launched = NO;
+    BOOL openedURL = NO;
     
-    if (browserBundleID) {
-      launched = [[NSWorkspace sharedWorkspace] openURLs:@[webURL] withAppBundleIdentifier:browserBundleID options:NSWorkspaceLaunchAsync additionalEventParamDescriptor:nil launchIdentifiers:NULL];
+    if(browserBundleID) {
+      openedURL = [[NSWorkspace sharedWorkspace] openURLs:@[webURL] withAppBundleIdentifier:browserBundleID options:NSWorkspaceLaunchAsync additionalEventParamDescriptor:nil launchIdentifiers:NULL];
     }
     
-    if (!launched) {
-      [[NSWorkspace sharedWorkspace] openURL:webURL];
+    if(!openedURL) {
+      openedURL = [[NSWorkspace sharedWorkspace] openURL:webURL];
+    }
+    if(!openedURL) {
+      NSLog(@"Unable to open URL %@", webURL);
     }
   }
 }
